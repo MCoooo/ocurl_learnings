@@ -15,27 +15,28 @@ bool_to_string :: proc(bool: bool) -> string {
 	return result
 }
 
-display_help :: proc() {
-	oblue("")
-	oblue("Usage: ip.exe [options]")
-	oblue("Options:")
-	oblue("  --any          Display all available adapters.")
-	oblue("Example:")
-	oblue("  ip.exe --any")
-	oblue("")
-}
 
 main :: proc() {
 
 	arguments := os.args[1:]
 
-	for arg in arguments {
+	url_arg := "https://script.google.com/macros/s/AKfycbyd5AcbAnWi2Yn0xhFRbyzS4qMq1VucMVgVvhul5XqS9HkAyJY/exec?tz=Europe%2FLondon"
+
+	for arg, i in arguments {
 		if arg == "--any" {
 		}
 		if arg == "--help" || arg == "-h" || arg == "/?" {
 			display_help()
 			return
 		}
+		if arg == "--url" || arg == "-u" {
+			if i + 1 > len(arguments) {
+				display_help()
+				return
+			}
+			url_arg = arguments[i + 1]
+		}
+
 	}
 
 	if len(arguments) > 5 {
@@ -48,10 +49,16 @@ main :: proc() {
 		os.exit(1)
 	}
 
-	curl.easy_setopt(curlptr, curl.OPT_URL, "https://example.com")
+	curl.easy_setopt(curlptr, curl.OPT_URL, url_arg)
+	curl.easy_setopt(curlptr, curl.OPT_FOLLOWLOCATION, url_arg)
 	res := curl.easy_perform(curlptr)
 	curl.easy_cleanup(curlptr)
-	fmt.println("Res was ", res)
+
+	if res > 0 {
+		buf: [1]byte
+		res_str := strconv.itoa(buf[:], int(res))
+		epair("Res was ", res_str)
+	}
 
 
 }

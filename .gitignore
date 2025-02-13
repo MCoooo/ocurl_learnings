@@ -1,6 +1,5 @@
 /.vscode
 /bin
-/curl
 /external
 /.task
 *.pdb
