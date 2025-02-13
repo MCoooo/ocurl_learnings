@@ -9,7 +9,7 @@ tasks:
     deps:
       - build
     cmds:
-      - bin/ocurl.exe
+      - bin/ocurl.exe {{.CLI_ARGS}}
     silent: true
     method: none
 
