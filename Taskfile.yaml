@@ -1,0 +1,39 @@
+version: 3
+
+tasks:
+  default:
+    cmds:
+      - task: test
+
+  run:
+    deps:
+      - build
+    cmds:
+      - bin/ocurl.exe
+    silent: true
+    method: none
+
+  build:
+    cmds:
+      - odin build . -out=bin/ocurl.exe
+    aliases:
+      - b
+    silent: true
+    sources:
+      - ./*.odin
+    generates:
+      - bin/ocurl.exe
+
+  build_debug:
+    cmds:
+      - odin build . -out=bin/ocurl-debug.exe -o:none -debug
+    aliases:
+      - bd
+    silent: true
+    sources:
+      - .*.odin
+    generates:
+      - bin/ocurl-debug.exe
+
+
+interval: 100ms
